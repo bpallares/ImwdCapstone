@@ -13,7 +13,7 @@ const Background = styled.div`
   filter: blur(2px);  
   z-index:-1;
   position: fixed;
-  
+
 `
 
 export default Background
