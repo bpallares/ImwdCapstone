@@ -11,7 +11,7 @@ import Login from '../pages/Login'
 import RegistrationForm from '../pages/Registration'
 import Home from '../pages/Home'
 import Settings from '../pages/Settings'
-import NotFound from '../pages/Notfound'
+import NotFound from '../pages/NotFound'
 import RequiredAuth, { NoAuth } from '../hocs/withAuth'
 import MainAuth from '../pages/MainAuth'
 
