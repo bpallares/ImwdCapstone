@@ -3,6 +3,7 @@ import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui
 import { withRouter } from 'react-router'
 import styled from 'styled-components'
 import {auth, storageKey} from '../../fire'
+import { Link } from 'react-router-dom'
 
 const Parent = styled.div`
   display:flex
@@ -42,9 +43,9 @@ class MainAuth extends Component {
               <Icon name='home' />
               Home
             </Menu.Item>
-            <Menu.Item name='gamepad' onClick={this.move}>
+            <Menu.Item name='gamepad' link >
               <Icon name='gamepad' />
-              Games
+              <Link to='/404'>Games</Link>
             </Menu.Item>
             <Menu.Item name='power' onClick={this.logout} >
               <Icon name='power' />

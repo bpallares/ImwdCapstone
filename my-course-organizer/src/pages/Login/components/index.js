@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
-import { Button, Checkbox, Form, Card } from 'semantic-ui-react'
+import { Button, Checkbox, Form, Card, Divider } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router'
+import {Link} from 'react-router-dom'
 import Background from '../components/background'
 import {auth} from '../../../fire'
+
 
 export const Parent = styled.div`
   display: flex;
@@ -68,10 +70,9 @@ class Login extends Component {
                 <label>Password</label>
                 <Form.Input type='password' placeholder='Last Name' name='pass' value={pass} onChange={this.handleChange} />
               </Form.Field>
-              <Button type='submit'>Login</Button>
-              <Footer>
-              Or Create an account <a href='/registration'>here</a>
-              </Footer>
+              <Button primary fluid type='submit'>Login</Button>
+              <Divider horizontal>Or</Divider>
+              <Button secondary fluid><Link to='/registration'> Sign Up Now </Link></Button>
             </Form>
           </Card>
         </Parent>
