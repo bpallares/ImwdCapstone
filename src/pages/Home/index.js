@@ -1,24 +1,39 @@
 import React, {Component} from 'react'
 import { Card, Button, Progress, Segment } from 'semantic-ui-react'
-import a from '../../data'
+// import a from '../../data'
 import Modal from '../Home/components/modal'
+import { firebaseApp, db, auth } from '../../fire'
 
 class Home extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      currentSemester: 0
+      currentSemester: 0,
+      uuid: null,
+      semesters: null
     }
   }
 
   handleClick = (index) => {
     this.setState({currentSemester: index})
-    // console.log(this.state.currentSemester)
+  }
+  async doShit () {
+    this.setState({uuid: auth.currentUser.uid})
+    await db.ref('/users/' + this.state.uuid).on('value', (snapshot) => {
+      console.log(snapshot.val())
+      this.setState({semesters: snapshot.val().semesters})
+    }, function (errorObject) {
+      console.log('The read failed: ' + errorObject.code)
+    })
+  }
+
+  // this.setState({semesters: snapshot.val().semesters})
+
+  componentWillMount () {
+    setTimeout(() => this.doShit(), 1000)
   }
 
   render () {
-    // console.log(a.classes[0].name)
-
     return (
       <div>
         <Card.Group>
@@ -35,7 +50,7 @@ class Home extends Component {
             </Card.Content>
             <Card.Content>
               <Card.Description>
-                {
+                { /*
                   a
                     ? a.semesters[this.state.currentSemester].classes.map((object, index) => (
                       <Segment key={index} color='green'>
@@ -50,7 +65,23 @@ class Home extends Component {
                           fontWeight: '100'}}>{object.days}</div>
                       </Segment>
                     ))
-                    : (<h1> No Classes </h1>)}
+                  : (<h1> No Classes </h1>) */
+                  this.state.semesters
+                    ? this.state.semesters[this.state.currentSemester].classes.map((object, index) => (
+                      <Segment key={index} color='green'>
+                        <div>{object.name}</div>
+                        <div style={{fontSize: '9px'}}>Course code: {object.code}</div>
+                        <div style={{
+                          fontSize: '11px',
+                          backgroundColor: '#2185d0',
+                          width: 'fit-content',
+                          padding: '1.5px',
+                          color: 'white',
+                          fontWeight: '100'}}>{object.days}</div>
+                      </Segment>
+                    ))
+                    : (<h1> No Classes </h1>)
+                }
               </Card.Description>
             </Card.Content>
           </Card>
@@ -62,8 +93,8 @@ class Home extends Component {
             <Card.Content>
               <Card.Description>
                 {
-                  a
-                    ? a.semesters.map((object, index) => {
+                  this.state.semesters
+                    ? this.state.semesters.map((object, index) => {
                       // console.log(index)
                       if (this.state.currentSemester === index) {
                         return (

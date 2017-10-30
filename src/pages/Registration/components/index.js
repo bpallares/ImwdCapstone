@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import { Form, Button, Card } from 'semantic-ui-react'
 import Background from '../../Login/components/background'
-// import {Parent, Centerer, Footer} from '../../Main/components/index'
+import { withRouter } from 'react-router'
 import styled from 'styled-components'
-import fire from '../../../fire'
+import {auth, db} from '../../../fire'
 
 const options = [
   { key: 'm', text: 'Male', value: 'male' },
@@ -37,8 +37,19 @@ class RForm extends Component {
 
   handleChange = (e, {name, value}) => { this.setState({[name]: value}) }
   // this needs to be on a different file 
-  handleSubmit =() => {
-    // well fuck it hhaahha
+  handleSubmit = () => {
+    const { history } = this.props
+    auth.createUserWithEmailAndPassword(this.state.email, this.state.pass).then((user) => {
+      db.ref('users/' + user.uid).set({
+        username: this.state.email,
+        email: this.state.email,
+        semesters: []
+      })
+    }).catch(function (error) {
+      console.log(error)
+    })
+
+    history.push('/')
   }
   render () {
     const {pass, email} = this.state
@@ -62,4 +73,4 @@ class RForm extends Component {
   }
 }
 
-export default RForm
+export default withRouter(RForm)
