@@ -16,7 +16,7 @@ class MainAuth extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      visible: false
+      visible: true
     }
   }
   move = () => {
@@ -32,12 +32,38 @@ class MainAuth extends Component {
       console.log(error)
     })
   }
+  toggleVisibility = () => this.setState({ visible: !this.state.visible })
+
   render () {
     const { history } = this.props
-
     return (
-      <Parent>
-        <Sidebar.Pushable >
+      <div>
+        <Sidebar as={Menu} animation='overlay' width='thin' visible icon='labeled' vertical inverted>
+          <Menu.Item name='home'>
+            <Icon name='home' />
+             Home
+          </Menu.Item>
+          <Menu.Item name='gamepad' link >
+            <Icon name='gamepad' />
+            <Link to='/404'>Games</Link>
+          </Menu.Item>
+          <Menu.Item name='power' onClick={this.logout} >
+            <Icon name='power' />
+             Logout
+          </Menu.Item>
+        </Sidebar>
+        <div style={{ height: '-webkit-fill-available', marginLeft: '150px', paddingTop: '20px', paddingLeft: '20px', paddingRight: '20px' }} >
+          {this.props.children}
+        </div>
+      </div>
+    )
+  }
+}
+
+export default withRouter(MainAuth)
+
+/** <Parent>
+        <Sidebar.Pushable>
           <Sidebar as={Menu} width='thin' visible icon='labeled' vertical inverted>
             <Menu.Item name='home'>
               <Icon name='home' />
@@ -53,17 +79,11 @@ class MainAuth extends Component {
             </Menu.Item>
           </Sidebar>
           <Sidebar.Pusher>
-            <Segment basic>
-              <div style={{ height: '-webkit-fill-available' }} >
+            <Segment style={{width: 'auto'}}>
+              <div style={{ height: '-webkit-fill-available', width: 'auto' }} >
                 {this.props.children}
               </div>
             </Segment>
           </Sidebar.Pusher>
         </Sidebar.Pushable>
-      </Parent>
-
-    )
-  }
-}
-
-export default withRouter(MainAuth)
+      </Parent> **/
