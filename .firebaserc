@@ -1,5 +1,6 @@
 {
   "projects": {
-    "capstone": "my-course-organizer"
+    "capstone": "my-course-organizer",
+    "default": "my-course-organizer"
   }
 }

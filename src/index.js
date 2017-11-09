@@ -5,6 +5,7 @@ import App from './App'
 import { createStore } from 'redux'
 import todoApp from './reducers/createReducers'
 import { Provider } from 'react-redux'
+import 'semantic-ui-css/semantic.min.css'
 
 import registerServiceWorker from './registerServiceWorker'
 

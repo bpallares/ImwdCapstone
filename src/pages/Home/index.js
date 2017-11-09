@@ -10,27 +10,34 @@ class Home extends Component {
     this.state = {
       currentSemester: 0,
       uuid: null,
-      semesters: null
+      semesters: null,
+      courses: null
     }
   }
 
   handleClick = (index) => {
     this.setState({currentSemester: index})
   }
-  async doShit () {
+  async doLoadFromDB () {
     this.setState({uuid: auth.currentUser.uid})
     await db.ref('/users/' + this.state.uuid).on('value', (snapshot) => {
-      console.log(snapshot.val())
-      this.setState({semesters: snapshot.val().semesters})
+      // console.log(Object.keys(snapshot.val().semesters))
+      snapshot.val().semesters &&
+        this.setState({semesters: Object.values(snapshot.val().semesters)})
+      this.setState({semestersId: snapshot.val().semesters})
+    }, function (errorObject) {
+      console.log('The read failed: ' + errorObject.code)
+    })
+    await db.ref('/courses/').on('value', (snapshot) => {
+      // console.log(snapshot.val())
+      this.setState({courses: snapshot.val()})
     }, function (errorObject) {
       console.log('The read failed: ' + errorObject.code)
     })
   }
 
-  // this.setState({semesters: snapshot.val().semesters})
-
   componentWillMount () {
-    setTimeout(() => this.doShit(), 1000)
+    setTimeout(() => this.doLoadFromDB(), 1000)
   }
 
   render () {
@@ -50,25 +57,10 @@ class Home extends Component {
             </Card.Content>
             <Card.Content>
               <Card.Description>
-                { /*
-                  a
-                    ? a.semesters[this.state.currentSemester].classes.map((object, index) => (
-                      <Segment key={index} color='green'>
-                        <div>{object.name}</div>
-                        <div style={{fontSize: '9px'}}>Course code: {object.code}</div>
-                        <div style={{
-                          fontSize: '11px',
-                          backgroundColor: '#2185d0',
-                          width: 'fit-content',
-                          padding: '1.5px',
-                          color: 'white',
-                          fontWeight: '100'}}>{object.days}</div>
-                      </Segment>
-                    ))
-                  : (<h1> No Classes </h1>) */
+                {
                   this.state.semesters
                     ? this.state.semesters[this.state.currentSemester].classes.map((object, index) => (
-                      <Segment key={index} color='green'>
+                      <Segment key={index}>
                         <div>{object.name}</div>
                         <div style={{fontSize: '9px'}}>Course code: {object.code}</div>
                         <div style={{
@@ -117,14 +109,19 @@ class Home extends Component {
           </Card>
         </Card.Group>
 
-        <Card.Group itemsPerRow={1}>
-          <Card>
+        <Card.Group>
+          <Card fluid>
             <Card.Content>
               <Card.Header>Add Classes</Card.Header>
             </Card.Content>
             <Card.Content>
               <Card.Description>
-                <Modal />
+                {
+                  this.state.courses
+                    ? <Modal classesOffered={this.state.courses} semesterData={this.state.semesters} semesterDataIdentifiers={this.state.semestersId} />
+                    : <h1>loading</h1>
+
+                }
               </Card.Description>
             </Card.Content>
           </Card>

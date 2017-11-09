@@ -6,7 +6,6 @@ import {Link} from 'react-router-dom'
 import Background from '../components/background'
 import {auth} from '../../../fire'
 
-
 export const Parent = styled.div`
   display: flex;
   justify-content: center; 
