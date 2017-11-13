@@ -40,14 +40,45 @@ class Home extends Component {
     setTimeout(() => this.doLoadFromDB(), 1000)
   }
 
+  deleteCard = (Semester, objectName, index) => {
+    console.log(Semester, objectName, this.state.semestersId)
+    console.log(Object.keys(this.state.semestersId)[index])
+
+    let foundIndex = Semester.classes.find((e, index) => {
+      if (e.name === objectName.name) { console.log(index) }
+    })
+
+    let copyArray = this.state.semesters
+    console.log(copyArray[this.state.currentSemester].classes)
+
+    copyArray[this.state.currentSemester].classes.splice(foundIndex, 1)
+    console.log(copyArray[this.state.currentSemester].classes.length)
+    // this.setState({semesters: copyArray})
+    if (copyArray[this.state.currentSemester].classes.length === 0) {
+      console.log('e')
+      db.ref('users/' + auth.currentUser.uid + '/semesters/' + Object.keys(this.state.semestersId)[index]).remove()
+    } else {
+      console.log('ef')
+      db.ref('users/' + auth.currentUser.uid + '/semesters/' + Object.keys(this.state.semestersId)[index]).set(copyArray[this.state.currentSemester])
+    }
+    if (this.state.currentSemester > 0) { this.setState({currentSemester: this.state.currentSemester - 1}) }
+    if (this.state.semesters.length === 1 && copyArray[this.state.currentSemester].classes.length === 0) { this.setState({semesters: null}) }
+  }
+
   render () {
     return (
       <div>
         <Card.Group>
           <Card fluid style={{padding: '30px'}}>
             <p> Current Status: </p>
-            <Progress percent={78} indicating progress label='you are almost there!' />
+            <Progress percent={95} indicating progress label='you are almost there!' />
+            <p>
+            You have <b>3</b> credits left out of <b>128</b><br />
+            You have over <b>126</b> credits.<br />
+            if credits were <b>$300</b> each , then you have spent <b>$37,800</b> in your education.
+            </p>
           </Card>
+
         </Card.Group>
 
         <Card.Group itemsPerRow={2}>
@@ -61,15 +92,24 @@ class Home extends Component {
                   this.state.semesters
                     ? this.state.semesters[this.state.currentSemester].classes.map((object, index) => (
                       <Segment key={index}>
-                        <div>{object.name}</div>
-                        <div style={{fontSize: '9px'}}>Course code: {object.code}</div>
-                        <div style={{
-                          fontSize: '11px',
-                          backgroundColor: '#2185d0',
-                          width: 'fit-content',
-                          padding: '1.5px',
-                          color: 'white',
-                          fontWeight: '100'}}>{object.days}</div>
+                        <div style={{display: 'flex'}}>
+                          <div>
+                            <div>{object.name}</div>
+                            <div style={{fontSize: '9px'}}>Course code: {object.code}</div>
+                            <div style={{
+                              fontSize: '11px',
+                              backgroundColor: '#2185d0',
+                              width: 'fit-content',
+                              padding: '1.5px',
+                              color: 'white',
+                              fontWeight: '100'}}>{object.days}</div>
+                          </div>
+                          <div style={{
+                            alignSelf: 'center',
+                            marginLeft: 'auto',
+                            height: 'auto'
+                          }} ><Button inverted color='red' circular icon='delete' onClick={() => this.deleteCard(this.state.semesters[this.state.currentSemester], object, this.state.currentSemester)} /></div>
+                        </div>
                       </Segment>
                     ))
                     : (<h1> No Classes </h1>)

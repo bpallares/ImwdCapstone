@@ -27,31 +27,36 @@ class ModalBox extends Component {
       yearSelected: '',
       code: '',
       semesters: '',
-      semestersId: ''
+      semestersId: '',
+      open: false
+
     }
   }
 
   handleSubmit = () => {
-    const {semesterDataIdentifiers} = this.props
+    const {semesterDataIdentifiers, classesOffered} = this.props
+    const semester = this.state.semesters
+    if (!this.state.majorSelected || !this.state.classSelected || !this.state.semesterSelected || !this.state.yearSelected) {
+      return console.log('Fill everything')
+    }
+
+    // console.log(classesOffered)
+    const classFinder = classesOffered.find((e, key) => e.majorName === this.state.majorSelected)
 
     const toAdd = {
       classes: [{
         name: this.state.classSelected,
-        code: this.state.code,
-        days: 'MWF'
+        code: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).code,
+        days: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).days
       }],
       name: `${this.state.semesterSelected} ${this.state.yearSelected}`
     }
-    const semester = this.state.semesters
 
-    if (!this.state.majorSelected || !this.state.classSelected || !this.state.semesterSelected || !this.state.yearSelected) {
-      return console.log('Fill everything')
-    }
     // console.log(this.state)
     if (this.state.semesters === null) {
       db.ref('users/' + auth.currentUser.uid + '/semesters').push(toAdd)
       this.setState({semesters: [toAdd]})
-      return console.log('Added')
+      return console.log(toAdd)
     }
 
     let indexUpdate = null
@@ -66,50 +71,20 @@ class ModalBox extends Component {
       console.log(Object.keys(semesterDataIdentifiers)[indexUpdate])
       semesterF.classes.push({
         name: this.state.classSelected,
-        code: this.state.code,
-        days: 'MWF'
+        code: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).code,
+        days: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).days
       })
       db.ref('users/' + auth.currentUser.uid + '/semesters/' + Object.keys(semesterDataIdentifiers)[indexUpdate]).set(semesterF)
+      console.log(semesterF)
     } else {
+      this.setState({semesters: [toAdd]})
       db.ref('users/' + auth.currentUser.uid + '/semesters').push(toAdd)
     }
-
-    /*
-    if (this.state.semesters) {
-      let Semesterfound = this.state.semesters.find((e) => e.name === `${this.state.semesterSelected} ${this.state.yearSelected}`)
-      // Semesterfound ? console.log(Semesterfound) : console.log('nope')
-      let repeatedClass = null
-      Semesterfound ? (
-        repeatedClass = Semesterfound.classes.find((e) => e.name === this.state.classSelected)
-      ) : console.log('nothing')
-      if (repeatedClass) { return console.log('you cant the same class 2 times per semester') }
-
-      if (Semesterfound) {
-        console.log('---------- 1 ---------')
-        Semesterfound.classes.push({
-          name: this.state.classSelected,
-          code: this.state.code,
-          days: 'MWF'
-        })
-        this.setState({semesters: [Semesterfound]})
-        console.log('---------- 1 ---------')
-      } else {
-        console.log('---------- 2 ---------')
-        semester.push(toAdd)
-        console.log(semester)
-        Semesterfound = semester
-        console.log('---------- 2 ---------')
-        this.setState({semesters: Semesterfound})
-      }
-      // this.setState({semesters: Semesterfound})
-      console.log('Semester found ====>>', Semesterfound)
-      // console.log('Semester found,,,, ====>>', this.state.semesters)
-
-      db.ref('users/' + auth.currentUser.uid + '/semesters').set(this.state.semesters)
-      // console.log('STATEEE', this.state)
-    } */
   }
 
+  componentWillReceiveProps (nextProps) {
+    this.setState({semesters: nextProps.semesterData})
+  }
   componentWillMount () {
     const {classesOffered, semesterData} = this.props
     this.setState({classesLU: classesOffered})
@@ -138,30 +113,30 @@ class ModalBox extends Component {
     function findClassesMajor (fruit) {
       return fruit.majorName === value
     }
-    // console.log(this.state.classesLU)
-
     this.state.classesLU.find(findClassesMajor).majorClasses.map((objects) => {
       let structure = {
         key: '',
         value: '',
         text: ''
       }
-      // console.log(objects)
       structure.key = objects.name
       structure.value = objects.name
       structure.text = objects.name
       copyArray.push(structure)
       this.setState({code: objects.code})
     })
+    console.log(this.state.classesLU.find(findClassesMajor))
     this.setState({ClassofMajor: copyArray})
   }
-  handleChange = (e, { name, value }) => {
+  handleChange = (e, { name, value, options }) => {
     this.setState({ [name]: value })
   }
 
+  flip = () => this.setState({ open: !this.state.open })
+
   render () {
     return (
-      <Modal trigger={<Button fluid color='green'>Add</Button>}>
+      <Modal open={this.state.open} trigger={<Button fluid color='green' onClick={this.flip}>Add</Button>}>
         <Modal.Header>Add a class</Modal.Header>
         <Modal.Content>
           <Modal.Description>
@@ -198,7 +173,7 @@ class ModalBox extends Component {
             <br />
             <br />
             <Button.Group fluid>
-              <Button >Cancel</Button>
+              <Button onClick={this.flip} >Cancel</Button>
               <Button.Or />
               <Button positive onClick={this.handleSubmit}>Save</Button>
             </Button.Group>
