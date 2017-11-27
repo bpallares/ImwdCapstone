@@ -9,7 +9,7 @@ class Home extends Component {
     super(props)
     this.state = {
       currentSemester: 0,
-      uuid: null,
+      uuid: props.uid ? props.uid : null,
       semesters: null,
       courses: null
     }
@@ -19,9 +19,7 @@ class Home extends Component {
     this.setState({currentSemester: index})
   }
   async doLoadFromDB () {
-    this.setState({uuid: auth.currentUser.uid})
     await db.ref('/users/' + this.state.uuid).on('value', (snapshot) => {
-      // console.log(Object.keys(snapshot.val().semesters))
       snapshot.val().semesters &&
         this.setState({semesters: Object.values(snapshot.val().semesters)})
       this.setState({semestersId: snapshot.val().semesters})
@@ -29,15 +27,18 @@ class Home extends Component {
       console.log('The read failed: ' + errorObject.code)
     })
     await db.ref('/courses/').on('value', (snapshot) => {
-      // console.log(snapshot.val())
       this.setState({courses: snapshot.val()})
     }, function (errorObject) {
       console.log('The read failed: ' + errorObject.code)
     })
   }
 
+  componentWillReceiveProps (props) {
+    this.setState({uuid: props.uid}, () => { this.doLoadFromDB() })
+  }
+
   componentWillMount () {
-    setTimeout(() => this.doLoadFromDB(), 1000)
+    this.state.uuid && this.doLoadFromDB()
   }
 
   deleteCard = (Semester, objectName, index) => {

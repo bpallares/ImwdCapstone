@@ -39,13 +39,13 @@ class MainAuth extends Component {
     return (
       <div>
         <Sidebar as={Menu} animation='overlay' width='thin' visible icon='labeled' vertical inverted>
-          <Menu.Item name='home'>
+          <Menu.Item name='home' as={Link} to='/'>
             <Icon name='home' />
              Home
           </Menu.Item>
-          <Menu.Item name='gamepad' link >
-            <Icon name='gamepad' />
-            <Link to='/404'>Games</Link>
+          <Menu.Item name='setting' as={Link} to='/settings' >
+            <Icon name='setting' />
+            Settings
           </Menu.Item>
           <Menu.Item name='power' onClick={this.logout} >
             <Icon name='power' />
@@ -61,29 +61,3 @@ class MainAuth extends Component {
 }
 
 export default withRouter(MainAuth)
-
-/** <Parent>
-        <Sidebar.Pushable>
-          <Sidebar as={Menu} width='thin' visible icon='labeled' vertical inverted>
-            <Menu.Item name='home'>
-              <Icon name='home' />
-              Home
-            </Menu.Item>
-            <Menu.Item name='gamepad' link >
-              <Icon name='gamepad' />
-              <Link to='/404'>Games</Link>
-            </Menu.Item>
-            <Menu.Item name='power' onClick={this.logout} >
-              <Icon name='power' />
-              Logout
-            </Menu.Item>
-          </Sidebar>
-          <Sidebar.Pusher>
-            <Segment style={{width: 'auto'}}>
-              <div style={{ height: '-webkit-fill-available', width: 'auto' }} >
-                {this.props.children}
-              </div>
-            </Segment>
-          </Sidebar.Pusher>
-        </Sidebar.Pushable>
-      </Parent> **/

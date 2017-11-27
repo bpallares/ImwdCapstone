@@ -7,6 +7,7 @@ import {
   Redirect,
   withRouter
 } from 'react-router-dom'
+import UIDProvider from '../UIDProvider'
 import Login from '../pages/Login'
 import RegistrationForm from '../pages/Registration'
 import Home from '../pages/Home'
@@ -15,10 +16,18 @@ import NotFound from '../pages/NotFound'
 import RequiredAuth, { NoAuth } from '../hocs/withAuth'
 import MainAuth from '../pages/MainAuth'
 
+const HomeComposed = () => (
+  <UIDProvider>
+    {(uid) => (
+      <Home uid={uid} />
+    )}
+  </UIDProvider>
+)
+
 const AppLogDashboard = () => (
   <MainAuth>
     <Switch>
-      <Route exact path='/' component={Home} />
+      <Route exact path='/' component={HomeComposed} />
       <Route exact path='/settings' component={Settings} />
       <Route component={NotFound} />
     </Switch>

@@ -39,10 +39,13 @@ class Settings extends Component {
       Object.keys(e).forEach((key, index2) => {
         if (key !== 'name') {
           let a = Math.floor(Math.random() * (4 - 0 + 1)) + 0
+          let b = Math.floor(Math.random() * (4 - 1 + 1)) + 1
+
           const classStructure = {
             name: null,
             code: null,
-            days: schedule[a]
+            days: schedule[a],
+            credit: b
 
           }
           classStructure.name = e[key].name
