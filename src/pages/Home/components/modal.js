@@ -47,7 +47,9 @@ class ModalBox extends Component {
       classes: [{
         name: this.state.classSelected,
         code: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).code,
-        days: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).days
+        days: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).days,
+        credit: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).credit
+
       }],
       name: `${this.state.semesterSelected} ${this.state.yearSelected}`
     }
@@ -72,7 +74,9 @@ class ModalBox extends Component {
       semesterF.classes.push({
         name: this.state.classSelected,
         code: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).code,
-        days: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).days
+        days: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).days,
+        credit: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).credit
+
       })
       db.ref('users/' + auth.currentUser.uid + '/semesters/' + Object.keys(semesterDataIdentifiers)[indexUpdate]).set(semesterF)
       console.log(semesterF)

@@ -14,6 +14,8 @@ class Settings extends Component {
   async doLoadFromDB () {
     await db.ref('/users/' + this.state.uuid).on('value', (snapshot) => {
       this.setState({username: snapshot.val().username})
+      this.setState({email: snapshot.val().email})
+      this.setState({semesters: snapshot.val().semesters})
     }, function (errorObject) {
       console.log('The read failed: ' + errorObject.code)
     })
@@ -43,6 +45,20 @@ class Settings extends Component {
     this.setState({ [name]: value })
   }
 
+  handleSubmit = () => {
+    console.log(this.state)
+    const a = {
+      creditDollar: this.state.creditDollar,
+      email: this.state.email,
+      name: this.state.name,
+      lastname: this.state.lastname,
+      limit: this.state.limit,
+      majorSelected: this.state.majorSelected,
+      semesters: this.state.semesters,
+      username: this.state.username
+    }
+    db.ref('users/' + this.state.uuid).set(a)
+  }
   render () {
     console.log(this.state)
     return (
@@ -75,7 +91,7 @@ class Settings extends Component {
             name='creditDollar'
 
           />
-          <Button secondary>Update</Button>
+          <Button secondary onClick={this.handleSubmit}>Update</Button>
         </Form>
       </Segment>
     )

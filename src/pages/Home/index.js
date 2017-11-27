@@ -20,9 +20,14 @@ class Home extends Component {
   }
   async doLoadFromDB () {
     await db.ref('/users/' + this.state.uuid).on('value', (snapshot) => {
-      snapshot.val().semesters &&
+      let counter = 0
+      if (snapshot.val().semesters) {
         this.setState({semesters: Object.values(snapshot.val().semesters)})
-      this.setState({semestersId: snapshot.val().semesters})
+        this.setState({semestersId: snapshot.val().semesters})
+        this.setState({user: snapshot.val()})
+        Object.values(snapshot.val().semesters).map((e) => e.classes.map(function (e) { counter += e.credit }))
+      }
+      this.setState({totalCredit: counter})
     }, function (errorObject) {
       console.log('The read failed: ' + errorObject.code)
     })
@@ -67,17 +72,38 @@ class Home extends Component {
   }
 
   render () {
+    let percentage = 0
+    let comment = ''
+    if (this.state.totalCredit) {
+      percentage = (this.state.totalCredit * this.state.user.limit) / 100
+
+      if (percentage > 10 && percentage <= 20) {
+        comment = 'You can do it'
+      } else if (percentage >= 21 && percentage <= 50) {
+        comment = 'Think about the rewards!'
+      } else if (percentage > 51 && percentage < 100) {
+        comment = 'almost there!'
+      } else if (percentage === 100) {
+        comment = 'Congratulations'
+      }
+    }
+
     return (
       <div>
         <Card.Group>
           <Card fluid style={{padding: '30px'}}>
             <p> Current Status: </p>
-            <Progress percent={95} indicating progress label='you are almost there!' />
-            <p>
-            You have <b>3</b> credits left out of <b>128</b><br />
-            You have over <b>126</b> credits.<br />
-            if credits were <b>$300</b> each , then you have spent <b>$37,800</b> in your education.
-            </p>
+            {
+              this.state.user &&
+              <span>
+                <Progress percent={percentage} indicating progress label={comment} />
+                <p>
+                You have <b>{this.state.totalCredit}</b> credits left out of <b>{this.state.user.limit}</b><br />
+                You have over <b>{this.state.user.limit}</b> credits.<br />
+                if credits were <b>${this.state.user.creditDollar}</b> each , then you have spent <b>${this.state.user.creditDollar * this.state.totalCredit}</b> in your education.
+                </p>
+              </span>
+            }
           </Card>
 
         </Card.Group>
@@ -97,6 +123,7 @@ class Home extends Component {
                           <div>
                             <div>{object.name}</div>
                             <div style={{fontSize: '9px'}}>Course code: {object.code}</div>
+                            <div style={{fontSize: '9px'}}>Course credit: {object.credit}</div>
                             <div style={{
                               fontSize: '11px',
                               backgroundColor: '#2185d0',
