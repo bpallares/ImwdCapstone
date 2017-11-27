@@ -23,12 +23,19 @@ const HomeComposed = () => (
     )}
   </UIDProvider>
 )
+const SettingsComposed = () => (
+  <UIDProvider>
+    {(uid) => (
+      <Settings uid={uid} />
+    )}
+  </UIDProvider>
+)
 
 const AppLogDashboard = () => (
   <MainAuth>
     <Switch>
       <Route exact path='/' component={HomeComposed} />
-      <Route exact path='/settings' component={Settings} />
+      <Route exact path='/settings' component={SettingsComposed} />
       <Route component={NotFound} />
     </Switch>
   </MainAuth>
