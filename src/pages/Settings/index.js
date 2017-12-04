@@ -7,7 +7,8 @@ class Settings extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      uuid: props.uid ? props.uid : null
+      uuid: props.uid ? props.uid : null,
+      message: null
     }
   }
 
@@ -46,7 +47,10 @@ class Settings extends Component {
   }
 
   handleSubmit = () => {
-    console.log(this.state)
+    // console.log(this.state)
+    if (!this.state.creditDollar || !this.state.limit || !this.state.majorSelected || !this.state.name || !this.state.lastname) {
+      return this.setState({message: 'Fill the fields'})
+    }
     const a = {
       creditDollar: this.state.creditDollar,
       email: this.state.email,
@@ -54,10 +58,12 @@ class Settings extends Component {
       lastname: this.state.lastname,
       limit: this.state.limit,
       majorSelected: this.state.majorSelected,
-      semesters: this.state.semesters,
+      semesters: this.state.semesters ? this.state.semesters : null,
       username: this.state.username
     }
+    console.log(a)
     db.ref('users/' + this.state.uuid).set(a)
+    this.setState({message: 'Success'})
   }
   render () {
     console.log(this.state)
@@ -65,6 +71,7 @@ class Settings extends Component {
       <Segment>
         <h1>Settings</h1>
         <Form>
+
           <Form.Input label='Username' disabled placeholder={this.state.username} />
           <span><b>Major</b></span><br />
           <Dropdown label='Major' placeholder='Major' search selection
@@ -91,6 +98,8 @@ class Settings extends Component {
             name='creditDollar'
 
           />
+          { this.state.message && (<span>{this.state.message}<br /><br /></span>)}
+
           <Button secondary onClick={this.handleSubmit}>Update</Button>
         </Form>
       </Segment>

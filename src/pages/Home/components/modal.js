@@ -28,7 +28,8 @@ class ModalBox extends Component {
       code: '',
       semesters: '',
       semestersId: '',
-      open: false
+      open: false,
+      message: null
 
     }
   }
@@ -37,6 +38,7 @@ class ModalBox extends Component {
     const {semesterDataIdentifiers, classesOffered} = this.props
     const semester = this.state.semesters
     if (!this.state.majorSelected || !this.state.classSelected || !this.state.semesterSelected || !this.state.yearSelected) {
+      this.setState({message: 'Please fill all the fields'})
       return console.log('Fill everything')
     }
 
@@ -69,7 +71,10 @@ class ModalBox extends Component {
       }
     })
     if (semesterF) {
-      if (semesterF.classes.find((e) => e.name === this.state.classSelected)) { return console.log('cannot add multiple classes') }
+      if (semesterF.classes.find((e) => e.name === this.state.classSelected)) {
+        this.setState({message: 'cannot add multiple classes'})
+        return console.log('cannot add multiple classes')
+      }
       console.log(Object.keys(semesterDataIdentifiers)[indexUpdate])
       semesterF.classes.push({
         name: this.state.classSelected,
@@ -176,6 +181,8 @@ class ModalBox extends Component {
             }
             <br />
             <br />
+            { this.state.message && (<span>{this.state.message}<br /><br /></span>)}
+
             <Button.Group fluid>
               <Button onClick={this.flip} >Cancel</Button>
               <Button.Or />

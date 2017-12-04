@@ -94,15 +94,21 @@ class Home extends Component {
           <Card fluid style={{padding: '30px'}}>
             <p> Current Status: </p>
             {
-              this.state.user &&
-              <span>
-                <Progress percent={percentage} indicating progress label={comment} />
-                <p>
+              this.state.user ? (
+                <span>
+                  <Progress percent={percentage} indicating progress label={comment} />
+                  <p>
                 You have <b>{this.state.totalCredit}</b> credits left out of <b>{this.state.user.limit}</b><br />
                 You have over <b>{this.state.user.limit}</b> credits.<br />
                 if credits were <b>${this.state.user.creditDollar}</b> each , then you have spent <b>${this.state.user.creditDollar * this.state.totalCredit}</b> in your education.
-                </p>
-              </span>
+                  </p>
+                </span>)
+                : (
+                  <p>
+                    please add classes to calculate your values
+                  </p>
+                )
+
             }
           </Card>
 

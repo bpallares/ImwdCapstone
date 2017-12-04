@@ -31,7 +31,8 @@ class RForm extends Component {
       fName: '',
       lName: '',
       email: '',
-      pass: ''
+      pass: '',
+      message: null
     }
   }
 
@@ -45,11 +46,11 @@ class RForm extends Component {
         email: this.state.email,
         semesters: []
       })
-    }).catch(function (error) {
+      history.push('/')
+    }).catch((error) => {
+      this.setState({message: error.message})
       console.log(error)
     })
-
-    history.push('/')
   }
   render () {
     const {pass, email} = this.state
@@ -63,6 +64,7 @@ class RForm extends Component {
               <Form.Input label='Email' placeholder='Email' name='email' value={email} onChange={this.handleChange} />
               <Form.Input label='Enter Password' type='password' name='pass' value={pass} onChange={this.handleChange} />
               <Form.Checkbox label='I agree to the Terms and Conditions' />
+              { this.state.message && (<span style={{color: 'red'}}>{this.state.message}<br /><br /></span>)}
               <Form.Field control={Button} content='Confirm' />
             </Form>
           </Card>

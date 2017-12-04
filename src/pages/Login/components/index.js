@@ -25,7 +25,8 @@ class Login extends Component {
     super(props)
     this.state = {
       user: '',
-      pass: ''
+      pass: '',
+      message: ''
     }
   }
 
@@ -33,18 +34,18 @@ class Login extends Component {
   handleSubmit = () => {
     const { history } = this.props
     auth.signInWithEmailAndPassword(this.state.user, this.state.pass)
-      .catch(function (error) {
+      .catch((error) => {
         // Handle Errors here.
         var errorCode = error.code
         var errorMessage = error.message
         if (errorCode === 'auth/wrong-password') {
-          console.log('Wrong password.')
+          this.setState({message: 'Wrong password'})
         } else {
-          console.log(errorMessage)
+          this.setState({message: errorMessage})
         }
       }).then(function (user) {
         user ? history.push('/')
-          : console.log('fails')
+          : console.log('Fails')
         // 
       })
   }
@@ -69,9 +70,10 @@ class Login extends Component {
                 <label>Password</label>
                 <Form.Input type='password' placeholder='Last Name' name='pass' value={pass} onChange={this.handleChange} />
               </Form.Field>
+              { this.state.message && (<span style={{color: 'red'}}>{this.state.message}<br /><br /></span>)}
               <Button primary fluid type='submit'>Login</Button>
               <Divider horizontal>Or</Divider>
-              <Button secondary fluid><Link to='/registration'> Sign Up Now </Link></Button>
+              <Link to='/registration'><Button secondary fluid> Sign Up Now </Button></Link>
             </Form>
           </Card>
         </Parent>
