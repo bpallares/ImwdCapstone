@@ -1,4 +1,4 @@
- [[https://github.com/bpallares/ImwdCapstone/blob/master/src/img/project.jpg|alt=octocat]]
+ [[https://github.com/bpallares/ImwdCapstone/blob/master/src/img/project.png|alt=Project]]
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
