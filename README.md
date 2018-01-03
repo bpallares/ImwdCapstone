@@ -1,5 +1,4 @@
-![alt text](https://raw.githubusercontent.com/username/projectname/branch/path/to/img.png)
-
+ [[https://github.com/bpallares/ImwdCapstone/blob/master/src/img/project.jpg|alt=octocat]]
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
