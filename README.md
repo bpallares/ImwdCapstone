@@ -1,4 +1,5 @@
- [[https://github.com/bpallares/ImwdCapstone/blob/master/src/img/project.png]]
+ ![Alt text](https://github.com/bpallares/ImwdCapstone/blob/master/src/img/project.png "Optional title")
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
