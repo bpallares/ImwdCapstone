@@ -42,7 +42,6 @@ class ModalBox extends Component {
       return console.log('Fill everything')
     }
 
-    // console.log(classesOffered)
     const classFinder = classesOffered.find((e, key) => e.majorName === this.state.majorSelected)
 
     const toAdd = {
@@ -56,7 +55,6 @@ class ModalBox extends Component {
       name: `${this.state.semesterSelected} ${this.state.yearSelected}`
     }
 
-    // console.log(this.state)
     if (this.state.semesters === null) {
       db.ref('users/' + auth.currentUser.uid + '/semesters').push(toAdd)
       this.setState({semesters: [toAdd]})
@@ -75,7 +73,6 @@ class ModalBox extends Component {
         this.setState({message: 'cannot add multiple classes'})
         return console.log('cannot add multiple classes')
       }
-      console.log(Object.keys(semesterDataIdentifiers)[indexUpdate])
       semesterF.classes.push({
         name: this.state.classSelected,
         code: classFinder.majorClasses.find((e) => e.name === this.state.classSelected).code,
@@ -84,7 +81,6 @@ class ModalBox extends Component {
 
       })
       db.ref('users/' + auth.currentUser.uid + '/semesters/' + Object.keys(semesterDataIdentifiers)[indexUpdate]).set(semesterF)
-      console.log(semesterF)
     } else {
       this.setState({semesters: [toAdd]})
       db.ref('users/' + auth.currentUser.uid + '/semesters').push(toAdd)
@@ -98,21 +94,18 @@ class ModalBox extends Component {
     const {classesOffered, semesterData} = this.props
     this.setState({classesLU: classesOffered})
     this.setState({semesters: semesterData})
-    // console.log(classesOffered)
 
     classesOffered.map((major) => {
       let structure = {
         key: '',
         value: '',
         text: ''
-        // classes: []
       }
       structure.key = major.majorName
       structure.value = major.majorName
       structure.text = major.majorName
       OptionMajor.push(structure)
     })
-    // console.log(OptionMajor)
   }
 
   handleChangeMajor = (e, {value}) => {
@@ -134,7 +127,6 @@ class ModalBox extends Component {
       copyArray.push(structure)
       this.setState({code: objects.code})
     })
-    console.log(this.state.classesLU.find(findClassesMajor))
     this.setState({ClassofMajor: copyArray})
   }
   handleChange = (e, { name, value, options }) => {
