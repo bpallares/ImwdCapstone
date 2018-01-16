@@ -29,12 +29,12 @@ class Home extends Component {
       }
       this.setState({totalCredit: counter})
     }, function (errorObject) {
-      console.log('The read failed: ' + errorObject.code)
+      return errorObject
     })
     await db.ref('/courses/').on('value', (snapshot) => {
       this.setState({courses: snapshot.val()})
     }, function (errorObject) {
-      console.log('The read failed: ' + errorObject.code)
+      return errorObject.code
     })
   }
 
@@ -47,24 +47,16 @@ class Home extends Component {
   }
 
   deleteCard = (Semester, objectName, index) => {
-    console.log(Semester, objectName, this.state.semestersId)
-    console.log(Object.keys(this.state.semestersId)[index])
-
     let foundIndex = Semester.classes.find((e, index) => {
       if (e.name === objectName.name) { console.log(index) }
     })
 
     let copyArray = this.state.semesters
-    console.log(copyArray[this.state.currentSemester].classes)
 
     copyArray[this.state.currentSemester].classes.splice(foundIndex, 1)
-    console.log(copyArray[this.state.currentSemester].classes.length)
-    // this.setState({semesters: copyArray})
     if (copyArray[this.state.currentSemester].classes.length === 0) {
-      console.log('e')
       db.ref('users/' + auth.currentUser.uid + '/semesters/' + Object.keys(this.state.semestersId)[index]).remove()
     } else {
-      console.log('ef')
       db.ref('users/' + auth.currentUser.uid + '/semesters/' + Object.keys(this.state.semestersId)[index]).set(copyArray[this.state.currentSemester])
     }
     if (this.state.currentSemester > 0) { this.setState({currentSemester: this.state.currentSemester - 1}) }
@@ -161,7 +153,6 @@ class Home extends Component {
                 {
                   this.state.semesters
                     ? this.state.semesters.map((object, index) => {
-                      // console.log(index)
                       if (this.state.currentSemester === index) {
                         return (
                           <Segment key={index} color='green'>
