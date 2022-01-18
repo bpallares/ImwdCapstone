@@ -7,9 +7,9 @@
     "babel-install": "^2.1.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "firebase": "^4.5.1",
-    "prop-types": "^15.5.10",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "prop-types": "^15.6.2",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
@@ -19,7 +19,7 @@
     "redux-thunk": "^2.2.0",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.73.1",
-    "styled-components": "^2.1.2"
+    "styled-components": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
